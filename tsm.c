@@ -91,7 +91,7 @@ void tsm_driver() {
   {
 
     if (numThreads == 1) {
-      cities_to_check = (int *) malloc ((numCities) * sizeof(int));
+      cities_to_check = (int *) malloc ((numCities -1) * sizeof(int));
     } 
     else {
       cities_to_check = (int *) malloc ((numThreads-2) * sizeof(int));
