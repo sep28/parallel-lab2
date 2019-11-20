@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
 
 void tsm_driver() { 
   
-  if (numThreads > numCities) {
+  if (numThreads >= numCities) {
       printf("Your number of threads must be less than the number of cities\n");
       exit (1);
   }
@@ -212,6 +212,6 @@ void tsm_driver() {
   }
   printf("\nDistance: %d\n",best_dist);
   
-  return(1);
+  //return(1);
 
 }
