@@ -16,7 +16,7 @@ int numPaths;
 int pathcount_per_thread;
 int *cities_to_check; //thread specific array
 int thread_city;
-int** distArray
+int** distArray;
 
 int main(int argc, char* argv[]) {
 
@@ -104,7 +104,7 @@ void one_by_one() {
       this_dist = initial_dist;
       this_dist += distArray[thread_city][cities_to_check[0]];
       for (i=1;i<numCities-2;i++) {  //adding distances
-        this_dist += a[cities_to_check[i-1]][cities_to_check[i]];
+        this_dist += distArray[cities_to_check[i-1]][cities_to_check[i]];
         if (this_dist >= best_dist) break;  //fail, don't need to iterate anymore
       }
 
