@@ -82,10 +82,10 @@ void one_by_one() {
   #pragma omp parallel num_threads(numThreads) private(cities_to_check,thread_city)
   {
     cities_to_check = (int *) malloc ((numThreads-2) * sizeof(int));
-    int i;
-
+  
     //POPULTATING CITIES TO CHECK FOR EACH THREAD
     int idx = 0;
+  	int i;
     thread_city = omp_get_thread_num()+1;
     for (i=1;i<numCities;i++) {
       if (i != thread_city) {
