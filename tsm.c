@@ -85,16 +85,33 @@ int main(int argc, char* argv[]) {
 
 } //end of main
 
-void tsm_driver() { 
+int tsm_driver() { 
   
   #pragma omp parallel num_threads(numThreads) private(cities_to_check,thread_city)
   {
 
-    if (numThreads == 1) {
+    if (numThreads == 1 && numCities > 2) {
       cities_to_check = (int *) malloc ((numCities -1) * sizeof(int));
     } 
-    else {
+
+    else if (numCities == 2) {
+      printf("Best path: ");
+      int j;
+      for (j=0;j<numCities;j++) {
+      printf("%d ",j);
+      }
+      best_dist = distArray[0][1];
+      printf("\nDistance: %d\n",best_dist);
+      return (1);
+    }
+
+    else if (numThreads < numCities) {
       cities_to_check = (int *) malloc ((numThreads-2) * sizeof(int));
+    }
+
+    else {
+      printf("Your number of threads must be less than the number of cities\n");
+      return (1);
     }
 
     //POPULTATING CITIES TO CHECK FOR EACH THREAD
@@ -180,14 +197,14 @@ void tsm_driver() {
     #pragma omp barrier
   }//END PARALLELISM
 
-  /* FINAL STEP: OUTPUT
-   * Output final shortest path and distance.
-   */
+//OUTPUTTING THE  BEST PATH
   printf("Best path: ");
   int j;
-  for (j=0;j<numCities;j++)
+  for (j=0;j<numCities;j++) {
     printf("%d ",best_path[j]);
+  }
   printf("\nDistance: %d\n",best_dist);
-  //printf("Shortest path found by thread %d.\n",shortest_thread);
+  
+  return(1);
 
 }
