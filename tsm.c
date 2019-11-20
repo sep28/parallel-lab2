@@ -5,25 +5,30 @@
 
 void one_by_one();
 
+//GLOBAL VARIABLES
+int numThreads; 
+int numCities;
+int currentPath;
+int best_dist; //should get overwritten in first iteration
+int best_thread; //id of the thread that has the best distance
+int *bestPath; //array that contains the best path 
+int numPaths;
+int pathcount_per_thread;
+int *cities_to_check; //thread specific array
+int thread_city;
+
 int main(int argc, char* argv[]) {
 
 	if (argc != 4) {
-		printf("You entered %d arguments, we require %d arguments" argc, 4);
+		printf("You entered %d arguments, we require %d arguments", argc, 4);
 		return;
 	}
 
-	//GLOBAL VARIABLES
-	int numThreads = atoi (argv[1]);
-	int numCities = atoi (argv[2]);
-	int currentPath = 0;
-	int best_dist = 1000000; //should get overwritten in first iteration
-	int best_thread; //id of the thread that has the best distance
-	int *bestPath = (int *) malloc( numCities * sizeof(int)); //array that contains the best path 
-	int numPaths;
-	int pathcount_per_thread;
-	int *cities_to_check; //thread specific array
-	int thread_city;
-
+	numThreads = atoi (argv[1]);
+	numCities = atoi (argv[2]);
+	currentPath = 0;
+	best_dist = 1000000; //should get overwritten in first iteration
+	bestPath = (int *) malloc( numCities * sizeof(int)); //array that contains the best path 
 
 
 	//READING MATRIX
@@ -51,7 +56,7 @@ int main(int argc, char* argv[]) {
 	//POPULATING OUR ARRAY
 	for(i = 0; i < numCities; i++) {
 		for (j = 0; j < numCities; j++) {
-			fscanf(fp, "%d", &distArray[i][j]);
+			fscanf(fptr, "%d", &distArray[i][j]);
 		}
 	}
 
@@ -62,7 +67,7 @@ int main(int argc, char* argv[]) {
 	//CALCULATING TOTAL NUMBER OF PERMUTATIONS/PATHS
 	numPaths = 1;
 	int z;
-	for(z = numcities - 1; z > 0; z--) {
+	for(z = numCities - 1; z > 0; z--) {
 		numPaths = z * numPaths;
 	}
 	pathcount_per_thread = numPaths / numThreads; //num of paths that each thread is responsible for
