@@ -27,13 +27,6 @@ int main(int argc, char* argv[]) {
 
 	numThreads = atoi (argv[1]);
 	numCities = atoi (argv[2]);
-
-	/*
-	if (numThreads == numCities) {
-		++numThreads;
-	}
-	*/
-	
 	currentPath = 0;
 	best_dist = 1000000; //should get overwritten in first iteration
 	best_path = (int *) malloc( numCities * sizeof(int)); //array that contains the best path 
@@ -113,12 +106,7 @@ void one_by_one() {
 
       for (i=1;i<numCities-2;i++) {  //adding distances
         this_dist += distArray[cities_to_check[i-1]][cities_to_check[i]];
-        if (this_dist < best_dist) { //so far so good, keep iterating
-        	continue;
-        }
-        else { //we only reach this if "this_dist" is worse than the global "best_dist"
-        	break; 
-        }
+        if (this_dist >= best_dist) break;  //fail, don't need to iterate anymore
       }
 
       if (this_dist < best_dist) 
@@ -138,12 +126,9 @@ void one_by_one() {
         }//END CRITICAL SECTION
       }
 
-    /*	The following snippet was partly inspired by a stackexchange post
-    *		The main parts I needed help with here were regards to how to get the next permutation/path
-    *		This part iterates through the thread specific number of cities to check and 
-    *		makes sure that there is another permutation to check, if not then we're done
-    *		if there are still more paths, next permutation located in cities_to_check 
-    */
+      /* STEP 3: GET NEXT NEW PERMUTATION LEXICOGRAPHICALLY 
+       *         If this is the last permutation, just end this thread.
+       */
       int x,y,temp;
       x = numCities-3;
       while (x>0 && cities_to_check[x-1] >= cities_to_check[x])
@@ -168,8 +153,9 @@ void one_by_one() {
         x++;
         y--;
       }
+      /* END PERMUTATION, next permutation located in cities_to_permute */
 
-    }//END MAIN LOOP
+    }//END COMPUTATIONAL LOOP
     #pragma omp barrier
   }//END PARALLELISM
 
