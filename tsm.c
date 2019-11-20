@@ -4,7 +4,7 @@
 
 //correct version
 
-int tsm_driver();
+void tsm_driver();
 
 //GLOBAL VARIABLES
 int numThreads; 
@@ -85,8 +85,12 @@ int main(int argc, char* argv[]) {
 
 } //end of main
 
-int tsm_driver() { 
+void tsm_driver() { 
   
+  if (numThreads > numCities) {
+      printf("Your number of threads must be less than the number of cities\n");
+      exit (1);
+  }
   #pragma omp parallel num_threads(numThreads) private(cities_to_check,thread_city)
   {
 
@@ -105,15 +109,18 @@ int tsm_driver() {
       exit (1);
     }
 
-    else if (numThreads <= numCities) {
+    //else if (numThreads <= numCities) {
+    else {
       cities_to_check = (int *) malloc ((numThreads-2) * sizeof(int));
     }
+    
 
+/*
     else {
       printf("Your number of threads must be less than the number of cities\n");
       exit (1);
     }
-
+*/
     //POPULTATING CITIES TO CHECK FOR EACH THREAD
     int idx = 0;
     int i;
