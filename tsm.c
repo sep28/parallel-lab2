@@ -4,7 +4,7 @@
 
 //correct version
 
-void tsm_driver();
+int tsm_driver();
 
 //GLOBAL VARIABLES
 int numThreads; 
