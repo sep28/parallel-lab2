@@ -102,7 +102,7 @@ int tsm_driver() {
       }
       best_dist = distArray[0][1];
       printf("\nDistance: %d\n",best_dist);
-      return (1);
+      exit (1);
     }
 
     else if (numThreads < numCities) {
@@ -111,7 +111,7 @@ int tsm_driver() {
 
     else {
       printf("Your number of threads must be less than the number of cities\n");
-      return (1);
+      exit (1);
     }
 
     //POPULTATING CITIES TO CHECK FOR EACH THREAD
