@@ -105,7 +105,7 @@ int tsm_driver() {
       exit (1);
     }
 
-    else if (numThreads < numCities) {
+    else if (numThreads <= numCities) {
       cities_to_check = (int *) malloc ((numThreads-2) * sizeof(int));
     }
 
