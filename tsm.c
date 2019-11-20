@@ -27,6 +27,9 @@ int main(int argc, char* argv[]) {
 
 	numThreads = atoi (argv[1]);
 	numCities = atoi (argv[2]);
+	if (numThreads == numCities) {
+		numThreads++;
+	}
 	currentPath = 0;
 	best_dist = 1000000; //should get overwritten in first iteration
 	best_path = (int *) malloc( numCities * sizeof(int)); //array that contains the best path 
