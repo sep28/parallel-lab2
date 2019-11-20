@@ -16,6 +16,7 @@ int numPaths;
 int pathcount_per_thread;
 int *cities_to_check; //thread specific array
 int thread_city;
+int** distArray
 
 int main(int argc, char* argv[]) {
 
@@ -28,7 +29,7 @@ int main(int argc, char* argv[]) {
 	numCities = atoi (argv[2]);
 	currentPath = 0;
 	best_dist = 1000000; //should get overwritten in first iteration
-	bestPath = (int *) malloc( numCities * sizeof(int)); //array that contains the best path 
+	best_path = (int *) malloc( numCities * sizeof(int)); //array that contains the best path 
 
 
 	//READING MATRIX
@@ -45,7 +46,7 @@ int main(int argc, char* argv[]) {
 		exit(1);
 	}
 
-	int** distArray = (int**) malloc(numCities * sizeof(int*)); //creating our array
+	distArray = (int**) malloc(numCities * sizeof(int*)); //creating our array
 	if (distArray == NULL) {
 		printf("Sorry could not allocate memory for your matrix\n");
 		exit(1);
@@ -101,7 +102,7 @@ void one_by_one() {
        *         Start with this_distance = base_distance (0->thread_id+1)
        */
       this_dist = initial_dist;
-      this_dist += a[thread_city][cities_to_check[0]];
+      this_dist += distArray[thread_city][cities_to_check[0]];
       for (i=1;i<numCities-2;i++) {  //adding distances
         this_dist += a[cities_to_check[i-1]][cities_to_check[i]];
         if (this_dist >= best_dist) break;  //fail, don't need to iterate anymore
