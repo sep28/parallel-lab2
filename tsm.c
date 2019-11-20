@@ -11,7 +11,7 @@ int numCities;
 int currentPath;
 int best_dist; //should get overwritten in first iteration
 int best_thread; //id of the thread that has the best distance
-int *bestPath; //array that contains the best path 
+int *best_path; //array that contains the best path 
 int numPaths;
 int pathcount_per_thread;
 int *cities_to_check; //thread specific array
@@ -92,7 +92,7 @@ void one_by_one() {
       } 
     }
 
-    int initial_dist = a[0][thread_city];
+    int initial_dist = distArray[0][thread_city];
     int this_dist; //thread specific dist
 
     for (i=0;i<pathcount_per_thread;i++) {
@@ -101,7 +101,7 @@ void one_by_one() {
        *         Start with this_distance = base_distance (0->thread_id+1)
        */
       this_dist = initial_dist;
-      this_dist += a[thread_city][cities_to_permute[0]];
+      this_dist += a[thread_city][cities_to_check[0]];
       for (i=1;i<numCities-2;i++) {  //adding distances
         this_dist += a[cities_to_check[i-1]][cities_to_check[i]];
         if (this_dist >= best_dist) break;  //fail, don't need to iterate anymore
@@ -111,7 +111,7 @@ void one_by_one() {
       {
         #pragma omp critical //make sure no more than one thread is accessing this bloc
         {
-          if (this_dist < shortest_dist) //condition still holds?
+          if (this_dist < best_dist) //condition still holds?
           {
             best_dist = this_dist;
             best_path[0] = 0;
@@ -135,7 +135,7 @@ void one_by_one() {
       if (x==0) //last permutation, so break out of computational loop
         break;
 
-      y = numCitids-3;
+      y = numCities-3;
       while(cities_to_check[y] <= cities_to_check[x-1])
         y--;
 
@@ -162,7 +162,7 @@ void one_by_one() {
    */
   printf("Best path: ");
   int j;
-  for (j=0;j<num;j++)
+  for (j=0;j<numCities;j++)
     printf("%d ",best_path[j]);
   printf("\nDistance: %d\n",best_dist);
   //printf("Shortest path found by thread %d.\n",shortest_thread);
