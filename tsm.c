@@ -90,7 +90,7 @@ void tsm_driver() {
   #pragma omp parallel num_threads(numThreads) private(cities_to_check,thread_city)
   {
 
-    if (numThreas == 1) {
+    if (numThreads == 1) {
       cities_to_check = (int *) malloc ((numCities) * sizeof(int));
     } 
     else {
